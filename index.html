@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Triarchic Psychopathy Assessment</title>
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #4b0082;
+      padding: 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    main {
+      padding: 1rem;
+    }
+    .question {
+      margin-bottom: 1.5rem;
+    }
+    .question h2 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    button {
+      background: #4b0082;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 1rem;
+    }
+    button:hover {
+      background: #6a0dad;
+    }
+    #result {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Triarchic Psychopathy Assessment</h1>
+  </header>
+  <main>
+    <form id="quizForm">
+      <!-- Questions will be inserted here by JavaScript -->
+    </form>
+    <button onclick="calculateScore()">Submit</button>
+    <div id="result"></div>
+  </main>
+  <script>
+    const questions = [
+      // Boldness (1–17)
+      "I remain calm when others panic.",
+      "I thrive on taking social risks (e.g., speaking up in a group).",
+      "I feel little fear in dangerous situations.",
+      "I bounce back quickly after emotional setbacks.",
+      "I enjoy being the center of attention.",
+      "I rarely feel nervous before a challenge.",
+      "I handle criticism without getting upset.",
+      "I am confident in new and uncertain situations.",
+      "I feel invigorated by high-stakes tasks.",
+      "I remain composed under pressure.",
+      "I am comfortable making decisions on the fly.",
+      "I rarely experience anxiety in social settings.",
+      "I engage in adventurous activities for fun.",
+      "I trust my ability to handle emergencies.",
+      "I stay relaxed when facing conflict.",
+      "I don’t worry much about what could go wrong.",
+      "I feel energized by unexpected events.",
+      // Meanness (18–34)
+      "I seldom feel guilt when I hurt someone’s feelings.",
+      "I find it easy to exploit others for my gain.",
+      "Other people’s suffering does not bother me.",
+      "I feel little empathy for those in distress.",
+      "I enjoy seeing others fail.",
+      "I manipulate people without remorse.",
+      "I view kindness as a sign of weakness.",
+      "I struggle to form genuine emotional bonds.",
+      "I think “nice guys” finish last.",
+      "I rarely consider how my actions affect others.",
+      "I feel indifferent when I hear about injustice.",
+      "I find it amusing when people trust me and get deceived.",
+      "I think sympathy is overrated.",
+      "I believe people should fend for themselves.",
+      "I take pleasure in getting my way, even unfairly.",
+      "I find it hard to feel sorry for someone in need.",
+      "I see other people’s emotions as a tool I can use.",
+      // Disinhibition (35–50)
+      "I often act without thinking ahead.",
+      "I get bored easily and seek out excitement.",
+      "I struggle to stick to long-term plans.",
+      "I find it hard to control urges when I want something.",
+      "I regularly break rules to have fun.",
+      "I make decisions based on immediate desires.",
+      "I have difficulty resisting temptation.",
+      "I often change my mind on a whim.",
+      "I have outbursts of anger that surprise me.",
+      "I neglect responsibilities when I feel like it.",
+      "I feel restless if I have to wait.",
+      "I frequently make impulsive purchases.",
+      "I struggle to keep a consistent routine.",
+      "I act first and consider consequences later.",
+      "I engage in risky behaviors for thrill.",
+      "I find it hard to say “no” to myself when I want something."
+    ];
+
+    const form = document.getElementById('quizForm');
+
+    questions.forEach((question, index) => {
+      const div = document.createElement('div');
+      div.classList.add('question');
+      div.innerHTML = `
+        <h2>Q${index + 1}: ${question}</h2>
+        <div class="options">
+          <label><input type="radio" name="q${index}" value="0" required> False</label>
+          <label><input type="radio" name="q${index}" value="1"> Somewhat False</label>
+          <label><input type="radio" name="q${index}" value="2"> Somewhat True</label>
+          <label><input type="radio" name="q${index}" value="3"> True</label>
+        </div>
+      `;
+      form.appendChild(div);
+    });
+
+    function calculateScore() {
+      const formData = new FormData(form);
+      let totalScore = 0;
+      let boldness = 0;
+      let meanness = 0;
+      let disinhibition = 0;
+
+      for (let i = 0; i < questions.length; i++) {
+        const value = parseInt(formData.get(`q${i}`));
+        totalScore += value;
+        if (i < 17) boldness += value;
+        else if (i < 34) meanness += value;
+        else disinhibition += value;
+      }
+
+      let resultText = `Your total score: ${totalScore}/150\n`;
+      resultText += `Boldness: ${boldness}/51\n`;
+      resultText += `Meanness: ${meanness}/51\n`;
+      resultText += `Disinhibition: ${disinhibition}/48`;
+
+      document.getElementById('result').textContent = resultText;
+    }
+  </script>
+</body>
+</html>
